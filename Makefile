@@ -30,3 +30,21 @@ build: $(BINDIR)/$(BINNAME)
 
 $(BINDIR)/$(BINNAME): $(SRC)
 	GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o $(BINDIR)/$(BINNAME) ./cmd/senkyou
+
+# ------------------------------------------------------------------------------
+#  test
+
+.PHONY: test
+test: build
+ifeq ($(ARCH),s390x)
+test: TESTFLAGS += -v
+else
+test: TESTFLAGS += -race -v
+endif
+test: test-unit
+
+.PHONY: test-unit
+test-unit:
+	@echo
+	@echo "==> Running unit tests <=="
+	GO111MODULE=on go test $(GOFLAGS) -run $(TESTS) $(PKG) $(TESTFLAGS)
