@@ -5,8 +5,7 @@
 *.so
 *.dylib
 
-bin/
-bin/senkyou
+.bin
 
 # Test binary, built with `go test -c`
 *.test
