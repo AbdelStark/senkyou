@@ -15,9 +15,9 @@ func main() {
 		Short: "senkyou provides an Ethereum RPC gateway over message broker systems such as Kafka.",
 		Run:   run(&config),
 	}
-	cmd.PersistentFlags().StringVar(&config.KafkaUrl, "kafkaUrl", config.KafkaUrl, "kafka bootstrap server (default is 127.0.0.1:9092)")
+	cmd.PersistentFlags().StringVar(&config.KafkaUrl, "kafkaUrl", config.KafkaUrl, "kafka bootstrap server")
 	cmd.PersistentFlags().BoolVar(&config.HttpEnabled, "http-enabled", config.HttpEnabled, "start http server for administration")
-	cmd.PersistentFlags().IntVar(&config.HttpPort, "http-port", config.HttpPort, "kafka bootstrap server (default is 127.0.0.1:9092)")
+	cmd.PersistentFlags().IntVar(&config.HttpPort, "http-port", config.HttpPort, "http port")
 
 	err := cmd.Execute()
 	if err != nil {
