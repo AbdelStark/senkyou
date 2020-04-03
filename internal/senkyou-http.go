@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"
@@ -26,6 +27,7 @@ type server struct {
 
 func (s server) Start() {
 	logger.Info("starting senkyou http server")
+	fmt.Println(s.config.string())
 	router := mux.NewRouter()
 	router.HandleFunc("/", s.home)
 	logger.Error("cannot start senkyou server", zap.Error(http.ListenAndServe(s.config.ListenAddr(), router)))

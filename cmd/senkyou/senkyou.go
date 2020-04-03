@@ -13,11 +13,12 @@ func main() {
 	cmd := &cobra.Command{
 		Use:   "senkyou",
 		Short: "senkyou provides an Ethereum RPC gateway over message broker systems such as Kafka.",
-		Run:   run(&config),
+		RunE:  run(&config),
 	}
-	cmd.PersistentFlags().StringVar(&config.KafkaUrl, "kafkaUrl", config.KafkaUrl, "kafka bootstrap server")
+	cmd.PersistentFlags().StringVar(&config.KafkaUrl, "kafka-url", config.KafkaUrl, "kafka bootstrap server")
 	cmd.PersistentFlags().BoolVar(&config.HttpEnabled, "http-enabled", config.HttpEnabled, "start http server for administration")
 	cmd.PersistentFlags().IntVar(&config.HttpPort, "http-port", config.HttpPort, "http port")
+	cmd.PersistentFlags().StringVar(&config.RpcUrl, "rpc-url", config.RpcUrl, "ethereum rpc url")
 
 	err := cmd.Execute()
 	if err != nil {
@@ -26,10 +27,16 @@ func main() {
 	}
 }
 
-func run(config *internal.Config) func(cmd *cobra.Command, args []string) {
-	return func(cmd *cobra.Command, args []string) {
+func run(config *internal.Config) func(cmd *cobra.Command, args []string) error {
+	return func(cmd *cobra.Command, args []string) error {
 		if config.HttpEnabled {
 			internal.NewSenkyouServer(*config).Start()
 		}
+		senkyou, err := internal.NewSenkyou(*config)
+		if err != nil {
+			return err
+		}
+		senkyou.Start()
+		return nil
 	}
 }
