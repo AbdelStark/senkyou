@@ -3,8 +3,8 @@ package internal
 import "errors"
 
 const (
-	Nats  BrokerType = "nats"
-	Kafka BrokerType = "kafka"
+	Nats  = "nats"
+	Kafka = "kafka"
 )
 
 type BrokerType string

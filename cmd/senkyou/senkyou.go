@@ -15,7 +15,10 @@ func main() {
 		Short: "senkyou provides an Ethereum RPC gateway over message broker systems such as Kafka.",
 		RunE:  run(&config),
 	}
+
+	cmd.PersistentFlags().StringVar(&config.BrokerType, "broker-type", config.BrokerType, "message broker type (nats, kafka)")
 	cmd.PersistentFlags().StringVar(&config.KafkaUrl, "kafka-url", config.KafkaUrl, "kafka bootstrap server")
+	cmd.PersistentFlags().StringVar(&config.NatsUrl, "nats-url", config.NatsUrl, "nats server url")
 	cmd.PersistentFlags().BoolVar(&config.HttpEnabled, "http-enabled", config.HttpEnabled, "start http server for administration")
 	cmd.PersistentFlags().IntVar(&config.HttpPort, "http-port", config.HttpPort, "http port")
 	cmd.PersistentFlags().StringVar(&config.RpcUrl, "rpc-url", config.RpcUrl, "ethereum rpc url")

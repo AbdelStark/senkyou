@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	BrokerType  BrokerType
+	BrokerType  string
 	NatsUrl string
 	KafkaUrl    string
 	HttpEnabled bool
