@@ -6,6 +6,8 @@
 *.dylib
 
 bin/
+bin/senkyou
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -15,4 +17,4 @@ bin/
 # Dependency directories (remove the comment below to include it)
 # vendor/
 .idea
-bin/senkyou
+

@@ -54,3 +54,11 @@ test-coverage:
 	@echo
 	@echo "==> Running unit tests with coverage <=="
 	@ ./scripts/coverage.sh
+
+.PHONY: coverage
+coverage:
+	@scripts/coverage.sh
+
+.PHONY: clean
+clean:
+	@rm -rf $(BINDIR) ./_dist
