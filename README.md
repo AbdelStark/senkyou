@@ -1,6 +1,7 @@
 # Senkyou
 Senkyou provides an Ethereum RPC gateway over message broker systems such as Kafka.
-Meaning: boat's bridge ( 桟橋 )
+
+Meaning: Senkyou is a Japanese word for boat's bridge ( 桟橋 )
 
 * [Install](#install)
 * [Examples](#examples)
