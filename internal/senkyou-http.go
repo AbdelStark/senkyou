@@ -36,19 +36,40 @@ func (s server) Start() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", s.home)
 	router.HandleFunc("/pub/{topic}/", s.pub)
+	router.HandleFunc("/sub/{topic}/", s.sub)
 	logger.Error("cannot start senkyou server", zap.Error(http.ListenAndServe(s.config.ListenAddr(), router)))
 }
 
 func (s server) pub(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	topic := vars["topic"]
-	logger.Debug("entering pub", zap.String("topic", topic))
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
+		logger.Error("failed to read request body", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	s.broker.Publish(topic, body)
+	err = s.broker.Publish(topic, body)
+	if err != nil {
+		logger.Error("failed to publish message", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.WriteHeader(http.StatusAccepted)
+}
+
+func (s server) sub(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	topic := vars["topic"]
+	err := s.broker.Subscribe(topic, func(message []byte) {
+		logger.Info("received message")
+		fmt.Println(string(message))
+	})
+	if err != nil {
+		logger.Error("failed to subscribe to topic", zap.Error(err))
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	w.WriteHeader(http.StatusAccepted)
 }
 

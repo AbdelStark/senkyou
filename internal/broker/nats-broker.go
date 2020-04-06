@@ -3,7 +3,6 @@ package broker
 import (
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/nats-io/nats.go"
-	"go.uber.org/zap"
 )
 
 var logger = log.ForceGetLogger()
@@ -23,7 +22,6 @@ func NewNatsBroker(url string) (Broker, error) {
 }
 
 func (n natsBroker) Publish(topic string, message []byte) error {
-	logger.Info("entering publish", zap.String("topic", topic))
 	return n.Conn.Publish(topic, message)
 }
 
