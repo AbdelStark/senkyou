@@ -1,4 +1,4 @@
-package internal
+package http
 
 import (
 	"fmt"
@@ -18,26 +18,26 @@ type SenkyouServer interface {
 	Start()
 }
 
-func NewSenkyouServer(config Config, broker broker.Broker) SenkyouServer {
+func NewSenkyouServer(listenAddr string, broker broker.Broker) SenkyouServer {
 	return server{
-		config: config,
-		broker: broker,
+		listenAddr: listenAddr,
+		broker:     broker,
 	}
 }
 
 type server struct {
-	config Config
-	broker broker.Broker
+	listenAddr string
+	broker     broker.Broker
 }
 
 func (s server) Start() {
 	logger.Info("starting senkyou http server")
-	fmt.Println(s.config.string())
+	defer logger.Sync()
 	router := mux.NewRouter()
 	router.HandleFunc("/", s.home)
 	router.HandleFunc("/pub/{topic}/", s.pub)
 	router.HandleFunc("/sub/{topic}/", s.sub)
-	logger.Error("cannot start senkyou server", zap.Error(http.ListenAndServe(s.config.ListenAddr(), router)))
+	logger.Error("cannot start senkyou server", zap.Error(http.ListenAndServe(s.listenAddr, router)))
 }
 
 func (s server) pub(w http.ResponseWriter, r *http.Request) {
