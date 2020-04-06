@@ -8,9 +8,9 @@ import (
 func NewBroker(config Config) (broker.Broker, error) {
 	switch config.BrokerType {
 	case broker.Nats:
-		return broker.NewNatsBroker(config.NatsUrl), nil
+		return broker.NewNatsBroker(config.NatsUrl)
 	case broker.Kafka:
-		return broker.NewKafkaBroker(config.KafkaUrl), nil
+		return broker.NewKafkaBroker(config.KafkaUrl)
 	default:
 		return nil, errors.New("unsupported broker type")
 	}

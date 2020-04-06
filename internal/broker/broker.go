@@ -8,8 +8,8 @@ const (
 type BrokerType string
 
 type Broker interface {
-	Publish(topic string, message []byte)
-	Subscribe(topic string, handler EventHandler)
+	Publish(topic string, message []byte) error
+	Subscribe(topic string, handler EventHandler) error
 }
 
-type EventHandler func([]byte) error
+type EventHandler func([]byte)

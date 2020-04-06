@@ -31,6 +31,13 @@ Flags:
 ```
 
 ## Examples
+
+Run NATS server.
+```sh 
+docker-compose -f build/package/nats/docker-compose.yml up -d
+```
+
+Run Senkyou.
 ```sh
 senkyou --http-enabled --http-port=9000 \
 --rpc-url=127.0.0.1:8545 \

@@ -39,15 +39,16 @@ func (s server) Start() {
 	logger.Error("cannot start senkyou server", zap.Error(http.ListenAndServe(s.config.ListenAddr(), router)))
 }
 
-func (server) pub(w http.ResponseWriter, r *http.Request) {
+func (s server) pub(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	topic := vars["topic"]
 	logger.Debug("entering pub", zap.String("topic", topic))
-	_, err := ioutil.ReadAll(r.Body)
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	s.broker.Publish(topic, body)
 	w.WriteHeader(http.StatusAccepted)
 }
 
