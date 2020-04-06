@@ -1,21 +1,19 @@
 package internal
 
+import "github.com/abdelhamidbakhta/senkyou/internal/broker"
+
 type Senkyou interface {
 	Start()
 }
 
-func NewSenkyou(config Config) (Senkyou, error) {
-	broker, err := NewBroker(config)
-	if err != nil {
-		return nil, err
-	}
+func NewSenkyou(config Config, broker broker.Broker) (Senkyou, error) {
 	return senkyou{
 		Broker: broker,
 	}, nil
 }
 
 type senkyou struct {
-	Broker
+	broker.Broker
 }
 
 func (s senkyou) Start() {

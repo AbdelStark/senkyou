@@ -1,11 +1,13 @@
-package internal
+package broker
 
 type natsBroker struct {
-
+	url string
 }
 
-func newNatsBroker(config Config) Broker{
-	return natsBroker{}
+func NewNatsBroker(url string) Broker {
+	return natsBroker{
+		url: url,
+	}
 }
 
 func (n natsBroker) Publish(topic string, message []byte) {
@@ -15,4 +17,3 @@ func (n natsBroker) Publish(topic string, message []byte) {
 func (n natsBroker) Subscribe(topic string, handler EventHandler) {
 
 }
-

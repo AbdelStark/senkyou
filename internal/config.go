@@ -3,6 +3,7 @@ package internal
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/abdelhamidbakhta/senkyou/internal/broker"
 )
 
 type Config struct {
@@ -16,8 +17,8 @@ type Config struct {
 
 func NewDefaultConfig() Config {
 	return Config{
-		BrokerType:  Nats,
-		NatsUrl:    "nats://127.0.0.1:4222",
+		BrokerType:  broker.Nats,
+		NatsUrl:     "nats://127.0.0.1:4222",
 		KafkaUrl:    "127.0.0.1:9092",
 		HttpEnabled: false,
 		HttpPort:    8080,

@@ -2,27 +2,32 @@ package internal
 
 import (
 	"fmt"
+	"github.com/abdelhamidbakhta/senkyou/internal/broker"
+	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
+	"io/ioutil"
 	"net/http"
 )
 
 var (
-	logger, _ = zap.NewDevelopment()
+	logger = log.ForceGetLogger()
 )
 
 type SenkyouServer interface {
 	Start()
 }
 
-func NewSenkyouServer(config Config) SenkyouServer {
+func NewSenkyouServer(config Config, broker broker.Broker) SenkyouServer {
 	return server{
 		config: config,
+		broker: broker,
 	}
 }
 
 type server struct {
 	config Config
+	broker broker.Broker
 }
 
 func (s server) Start() {
@@ -30,7 +35,20 @@ func (s server) Start() {
 	fmt.Println(s.config.string())
 	router := mux.NewRouter()
 	router.HandleFunc("/", s.home)
+	router.HandleFunc("/pub/{topic}/", s.pub)
 	logger.Error("cannot start senkyou server", zap.Error(http.ListenAndServe(s.config.ListenAddr(), router)))
+}
+
+func (server) pub(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	topic := vars["topic"]
+	logger.Debug("entering pub", zap.String("topic", topic))
+	_, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.WriteHeader(http.StatusAccepted)
 }
 
 func (server) home(w http.ResponseWriter, r *http.Request) {

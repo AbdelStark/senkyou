@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/abdelhamidbakhta/senkyou/internal"
+	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"os"
@@ -9,7 +10,7 @@ import (
 
 func main() {
 	config := internal.NewDefaultConfig()
-	logger, _ := zap.NewDevelopment()
+	logger := log.ForceGetLogger()
 	cmd := &cobra.Command{
 		Use:   "senkyou",
 		Short: "senkyou provides an Ethereum RPC gateway over message broker systems such as Kafka.",
@@ -32,10 +33,14 @@ func main() {
 
 func run(config *internal.Config) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		if config.HttpEnabled {
-			internal.NewSenkyouServer(*config).Start()
+		broker, err := internal.NewBroker(*config)
+		if err != nil {
+			return err
 		}
-		senkyou, err := internal.NewSenkyou(*config)
+		if config.HttpEnabled {
+			internal.NewSenkyouServer(*config, broker).Start()
+		}
+		senkyou, err := internal.NewSenkyou(*config, broker)
 		if err != nil {
 			return err
 		}
