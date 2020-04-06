@@ -7,22 +7,26 @@ import (
 )
 
 type Config struct {
-	BrokerType  string
-	NatsUrl string
-	KafkaUrl    string
-	HttpEnabled bool
-	HttpPort    int
-	RpcUrl      string
+	BrokerType                string
+	NatsUrl                   string
+	KafkaUrl                  string
+	HttpEnabled               bool
+	HttpPort                  int
+	RpcUrl                    string
+	TopicIncomingRpcRequests  string
+	TopicOutgoingRpcResponses string
 }
 
 func NewDefaultConfig() Config {
 	return Config{
-		BrokerType:  broker.Nats,
-		NatsUrl:     "nats://127.0.0.1:4222",
-		KafkaUrl:    "127.0.0.1:9092",
-		HttpEnabled: false,
-		HttpPort:    8080,
-		RpcUrl:      "127.0.0.1:8545",
+		BrokerType:                broker.Nats,
+		NatsUrl:                   "nats://127.0.0.1:4222",
+		KafkaUrl:                  "127.0.0.1:9092",
+		HttpEnabled:               false,
+		HttpPort:                  8080,
+		RpcUrl:                    "127.0.0.1:8545",
+		TopicIncomingRpcRequests:  "rpc.request",
+		TopicOutgoingRpcResponses: "rpc.response",
 	}
 }
 

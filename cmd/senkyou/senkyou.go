@@ -23,6 +23,8 @@ func main() {
 	cmd.PersistentFlags().BoolVar(&config.HttpEnabled, "http-enabled", config.HttpEnabled, "start http server for administration")
 	cmd.PersistentFlags().IntVar(&config.HttpPort, "http-port", config.HttpPort, "http port")
 	cmd.PersistentFlags().StringVar(&config.RpcUrl, "rpc-url", config.RpcUrl, "ethereum rpc url")
+	cmd.PersistentFlags().StringVar(&config.TopicIncomingRpcRequests, "topic-rpc-requests", config.TopicIncomingRpcRequests, "topic to use for receiving incoming RPC requests")
+	cmd.PersistentFlags().StringVar(&config.TopicOutgoingRpcResponses, "topic-rpc-responses", config.TopicOutgoingRpcResponses, "topic to use for pushing RPC responses")
 
 	err := cmd.Execute()
 	if err != nil {
