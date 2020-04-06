@@ -1,11 +1,8 @@
 package broker
 
 import (
-	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/nats-io/nats.go"
 )
-
-var logger = log.ForceGetLogger()
 
 type natsBroker struct {
 	*nats.Conn
