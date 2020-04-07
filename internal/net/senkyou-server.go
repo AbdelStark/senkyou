@@ -1,24 +1,25 @@
 package net
 
 import (
-	"fmt"
 	"github.com/abdelhamidbakhta/senkyou/internal/broker"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"io/ioutil"
 	"net/http"
 )
 
 var (
-	logger = log.ForceGetLogger()
+	logger *zap.Logger
 )
 
 type SenkyouServer interface {
 	Start()
 }
 
-func NewSenkyouServer(listenAddr string, broker broker.Broker) SenkyouServer {
+func NewSenkyouServer(listenAddr string, broker broker.Broker, logLevel zapcore.Level) SenkyouServer {
+	logger = log.GetLoggerWithLevel(logLevel)
 	return server{
 		listenAddr: listenAddr,
 		broker:     broker,
@@ -62,7 +63,6 @@ func (s server) sub(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	topic := vars["topic"]
 	err := s.broker.Subscribe(topic, func(message []byte) {
-		fmt.Println("new message")
 		logger.Info("received message", zap.String("topic", topic), zap.String("message", string(message)))
 	})
 	if err != nil {

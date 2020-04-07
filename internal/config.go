@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/abdelhamidbakhta/senkyou/internal/broker"
+	"github.com/abdelhamidbakhta/senkyou/internal/log"
 )
 
 type Config struct {
@@ -16,6 +17,7 @@ type Config struct {
 	TopicIncomingRpcRequests  string
 	TopicOutgoingRpcResponses string
 	TopicErrors               string
+	LogLevel                  log.LogLevelFlag
 }
 
 func NewDefaultConfig() Config {
@@ -29,6 +31,7 @@ func NewDefaultConfig() Config {
 		TopicIncomingRpcRequests:  "rpc.request",
 		TopicOutgoingRpcResponses: "rpc.response",
 		TopicErrors:               "errors",
+		LogLevel:                  log.NewLogLevelFlag(),
 	}
 }
 

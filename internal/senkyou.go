@@ -7,13 +7,14 @@ import (
 	"go.uber.org/zap"
 )
 
-var logger = log.ForceGetLogger()
+var logger *zap.Logger
 
 type Senkyou interface {
 	Start()
 }
 
 func NewSenkyou(config Config, broker broker.Broker) (Senkyou, error) {
+	logger = log.GetLoggerWithLevel(config.LogLevel.ZapLevel)
 	return senkyou{
 		config:    config,
 		broker:    broker,
