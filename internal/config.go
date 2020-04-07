@@ -15,6 +15,7 @@ type Config struct {
 	RpcUrl                    string
 	TopicIncomingRpcRequests  string
 	TopicOutgoingRpcResponses string
+	TopicErrors               string
 }
 
 func NewDefaultConfig() Config {
@@ -24,9 +25,10 @@ func NewDefaultConfig() Config {
 		KafkaUrl:                  "127.0.0.1:9092",
 		HttpEnabled:               false,
 		HttpPort:                  8080,
-		RpcUrl:                    "127.0.0.1:8545",
+		RpcUrl:                    "http://127.0.0.1:8545",
 		TopicIncomingRpcRequests:  "rpc.request",
 		TopicOutgoingRpcResponses: "rpc.response",
+		TopicErrors:               "errors",
 	}
 }
 

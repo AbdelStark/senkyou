@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/abdelhamidbakhta/senkyou/internal"
-	"github.com/abdelhamidbakhta/senkyou/internal/http"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
+	"github.com/abdelhamidbakhta/senkyou/internal/net"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"os"
@@ -27,6 +27,7 @@ func main() {
 	cmd.PersistentFlags().StringVar(&config.RpcUrl, "rpc-url", config.RpcUrl, "ethereum rpc url")
 	cmd.PersistentFlags().StringVar(&config.TopicIncomingRpcRequests, "topic-rpc-requests", config.TopicIncomingRpcRequests, "topic to use for receiving incoming RPC requests")
 	cmd.PersistentFlags().StringVar(&config.TopicOutgoingRpcResponses, "topic-rpc-responses", config.TopicOutgoingRpcResponses, "topic to use for pushing RPC responses")
+	cmd.PersistentFlags().StringVar(&config.TopicErrors, "topic-errors", config.TopicErrors, "topic to use for error handling")
 
 	err := cmd.Execute()
 	if err != nil {
@@ -47,7 +48,7 @@ func run(config *internal.Config) func(cmd *cobra.Command, args []string) error 
 		}
 		go senkyou.Start()
 		if config.HttpEnabled {
-			http.NewSenkyouServer(config.ListenAddr(), broker).Start()
+			net.NewSenkyouServer(config.ListenAddr(), broker).Start()
 		}
 
 		return nil

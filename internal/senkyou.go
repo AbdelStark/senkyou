@@ -3,6 +3,7 @@ package internal
 import (
 	"github.com/abdelhamidbakhta/senkyou/internal/broker"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
+	"github.com/abdelhamidbakhta/senkyou/internal/net"
 	"go.uber.org/zap"
 )
 
@@ -14,14 +15,16 @@ type Senkyou interface {
 
 func NewSenkyou(config Config, broker broker.Broker) (Senkyou, error) {
 	return senkyou{
-		config: config,
-		broker: broker,
+		config:    config,
+		broker:    broker,
+		rpcClient: net.NewRpcClient(config.RpcUrl),
 	}, nil
 }
 
 type senkyou struct {
-	config Config
-	broker broker.Broker
+	config    Config
+	broker    broker.Broker
+	rpcClient net.RpcClient
 }
 
 func (s senkyou) Start() {
@@ -33,6 +36,17 @@ func (s senkyou) Start() {
 }
 
 func (s senkyou) onIncomingRequest(request []byte) {
-	requestBody := string(request)
-	logger.Info("receiving new incoming request", zap.String("body", requestBody))
+	response, err := s.rpcClient.Call(request)
+	if err != nil {
+		s.handleError(err)
+		return
+	}
+	s.handleError(s.broker.Publish(s.config.TopicOutgoingRpcResponses, response))
+}
+
+func (s senkyou) handleError(err error) {
+	if err != nil {
+		logger.Error("error occurred", zap.Error(err))
+		_ = s.broker.Publish(s.config.TopicErrors, []byte(err.Error()))
+	}
 }

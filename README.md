@@ -27,9 +27,10 @@ Flags:
       --http-port int                http port (default 8080)
       --kafka-url string             kafka bootstrap server (default "127.0.0.1:9092")
       --nats-url string              nats server url (default "nats://127.0.0.1:4222")
-      --rpc-url string               ethereum rpc url (default "127.0.0.1:8545")
+      --rpc-url string               ethereum rpc url (default "http://127.0.0.1:8545")
       --topic-rpc-requests string    topic to use for receiving incoming RPC requests (default "rpc.request")
       --topic-rpc-responses string   topic to use for pushing RPC responses (default "rpc.response")
+      --topic-errors string          topic to use for error handling (default "errors")
 ```
 
 ## Examples
@@ -44,6 +45,7 @@ Run Senkyou.
 senkyou \
 --topic-rpc-requests=ethereum.rpc.requests \
 --topic-rpc-responses=ethereum.rpc.responses \ 
+--topic-errors=senkyou.errors \
 --http-enabled --http-port=9000 \
 --rpc-url=127.0.0.1:8545 \
 --nats-url=nats://127.0.0.1:4222 --broker-type=nats

@@ -40,7 +40,7 @@ services:
       - "8082:8082"
     environment:
       # KAFKA_REST_ZOOKEEPER_CONNECT: zoo1:2181
-      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_LISTENERS: net://0.0.0.0:8082/
       KAFKA_REST_HOST_NAME: kafka-rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
     depends_on:
@@ -53,7 +53,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      KAFKA_REST_PROXY_URL: "http://kafka-rest-proxy:8082/"
+      KAFKA_REST_PROXY_URL: "net://kafka-rest-proxy:8082/"
       PROXY: "true"
       MAX_BYTES: "5000000"
     depends_on:

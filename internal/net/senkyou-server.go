@@ -1,4 +1,4 @@
-package http
+package net
 
 import (
 	"fmt"
@@ -62,8 +62,8 @@ func (s server) sub(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	topic := vars["topic"]
 	err := s.broker.Subscribe(topic, func(message []byte) {
-		logger.Info("received message")
-		fmt.Println(string(message))
+		fmt.Println("new message")
+		logger.Info("received message", zap.String("topic", topic), zap.String("message", string(message)))
 	})
 	if err != nil {
 		logger.Error("failed to subscribe to topic", zap.Error(err))
