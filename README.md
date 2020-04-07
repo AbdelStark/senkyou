@@ -26,11 +26,12 @@ Flags:
       --http-enabled                 start http server for administration
       --http-port int                http port (default 8080)
       --kafka-url string             kafka bootstrap server (default "127.0.0.1:9092")
+      --logging logLevel             log level (DEBUG, INFO, WARN, ERROR) (default DEBUG)
       --nats-url string              nats server url (default "nats://127.0.0.1:4222")
       --rpc-url string               ethereum rpc url (default "http://127.0.0.1:8545")
+      --topic-errors string          topic to use for error handling (default "errors")
       --topic-rpc-requests string    topic to use for receiving incoming RPC requests (default "rpc.request")
       --topic-rpc-responses string   topic to use for pushing RPC responses (default "rpc.response")
-      --topic-errors string          topic to use for error handling (default "errors")
 ```
 
 ## Examples

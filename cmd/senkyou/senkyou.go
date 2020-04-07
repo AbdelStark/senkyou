@@ -26,7 +26,7 @@ func main() {
 	cmd.PersistentFlags().StringVar(&config.TopicIncomingRpcRequests, "topic-rpc-requests", config.TopicIncomingRpcRequests, "topic to use for receiving incoming RPC requests")
 	cmd.PersistentFlags().StringVar(&config.TopicOutgoingRpcResponses, "topic-rpc-responses", config.TopicOutgoingRpcResponses, "topic to use for pushing RPC responses")
 	cmd.PersistentFlags().StringVar(&config.TopicErrors, "topic-errors", config.TopicErrors, "topic to use for error handling")
-	cmd.PersistentFlags().Var(&config.LogLevel, "logging", "log level")
+	cmd.PersistentFlags().Var(&config.LogLevel, "logging", "log level (DEBUG, INFO, WARN, ERROR)")
 	err := cmd.Execute()
 	logger := log.GetLoggerWithLevel(config.LogLevel.ZapLevel)
 	defer logger.Sync()
