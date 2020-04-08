@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/abdelhamidbakhta/senkyou/internal"
+	"github.com/abdelhamidbakhta/senkyou/internal/config"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/abdelhamidbakhta/senkyou/internal/net"
 	"github.com/spf13/cobra"
@@ -10,25 +11,27 @@ import (
 )
 
 func main() {
-	config := internal.NewDefaultConfig()
+	senkyouConfig := config.NewDefaultConfig()
 
 	cmd := &cobra.Command{
 		Use:   "senkyou",
-		Short: "senkyou provides an Ethereum RPC gateway over message broker systems such as Kafka.",
-		RunE:  run(&config),
+		Short: "senkyou provides an Ethereum RPC gateway over message broker systems such as BrokerKafka.",
+		RunE:  run(&senkyouConfig),
 	}
-	cmd.PersistentFlags().StringVar(&config.BrokerType, "broker-type", config.BrokerType, "message broker type (nats, kafka)")
-	cmd.PersistentFlags().StringVar(&config.KafkaUrl, "kafka-url", config.KafkaUrl, "kafka bootstrap server")
-	cmd.PersistentFlags().StringVar(&config.NatsUrl, "nats-url", config.NatsUrl, "nats server url")
-	cmd.PersistentFlags().BoolVar(&config.HttpEnabled, "http-enabled", config.HttpEnabled, "start http server for administration")
-	cmd.PersistentFlags().IntVar(&config.HttpPort, "http-port", config.HttpPort, "http port")
-	cmd.PersistentFlags().StringVar(&config.RpcUrl, "rpc-url", config.RpcUrl, "ethereum rpc url")
-	cmd.PersistentFlags().StringVar(&config.TopicIncomingRpcRequests, "topic-rpc-requests", config.TopicIncomingRpcRequests, "topic to use for receiving incoming RPC requests")
-	cmd.PersistentFlags().StringVar(&config.TopicOutgoingRpcResponses, "topic-rpc-responses", config.TopicOutgoingRpcResponses, "topic to use for pushing RPC responses")
-	cmd.PersistentFlags().StringVar(&config.TopicErrors, "topic-errors", config.TopicErrors, "topic to use for error handling")
-	cmd.PersistentFlags().Var(&config.LogLevel, "logging", "log level (DEBUG, INFO, WARN, ERROR)")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.BrokerType, "broker-type", senkyouConfig.BrokerType, "message broker type (nats, kafka)")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.KafkaUrl, "kafka-url", senkyouConfig.KafkaUrl, "kafka bootstrap server")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.NatsUrl, "nats-url", senkyouConfig.NatsUrl, "nats server url")
+	cmd.PersistentFlags().BoolVar(&senkyouConfig.HttpEnabled, "http-enabled", senkyouConfig.HttpEnabled, "start http server for administration")
+	cmd.PersistentFlags().IntVar(&senkyouConfig.HttpPort, "http-port", senkyouConfig.HttpPort, "http port")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.RpcUrl, "rpc-url", senkyouConfig.RpcUrl, "ethereum rpc url")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.TopicIncomingRpcRequests, "topic-rpc-requests", senkyouConfig.TopicIncomingRpcRequests, "topic to use for receiving incoming RPC requests")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.TopicOutgoingRpcResponses, "topic-rpc-responses", senkyouConfig.TopicOutgoingRpcResponses, "topic to use for pushing RPC responses")
+	cmd.PersistentFlags().StringVar(&senkyouConfig.TopicErrors, "topic-errors", senkyouConfig.TopicErrors, "topic to use for error handling")
+	cmd.PersistentFlags().Var(&senkyouConfig.LogLevel, "logging", "log level (DEBUG, INFO, WARN, ERROR)")
+	cmd.PersistentFlags().BoolVar(&senkyouConfig.ApmEnabled, "apm-enabled", senkyouConfig.ApmEnabled, "enable application performance monitoring using elk stack")
+
 	err := cmd.Execute()
-	logger := log.GetLoggerWithLevel(config.LogLevel.ZapLevel)
+	logger := log.GetLoggerWithLevel(senkyouConfig.LogLevel.ZapLevel)
 	defer logger.Sync()
 	if err != nil {
 		logger.Error("Failed to execute", zap.Error(err))
@@ -36,19 +39,19 @@ func main() {
 	}
 }
 
-func run(config *internal.Config) func(cmd *cobra.Command, args []string) error {
+func run(cfg *config.Config) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		broker, err := internal.NewBroker(*config)
+		broker, err := internal.NewBroker(*cfg)
 		if err != nil {
 			return err
 		}
-		senkyou, err := internal.NewSenkyou(*config, broker)
+		senkyou, err := internal.NewSenkyou(*cfg, broker)
 		if err != nil {
 			return err
 		}
 		go senkyou.Start()
-		if config.HttpEnabled {
-			net.NewSenkyouServer(config.ListenAddr(), broker, config.LogLevel.ZapLevel).Start()
+		if cfg.HttpEnabled {
+			net.NewSenkyouServer(*cfg, broker, cfg.LogLevel.ZapLevel).Start()
 		}
 
 		return nil

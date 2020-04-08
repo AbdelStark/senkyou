@@ -3,14 +3,15 @@ package internal
 import (
 	"errors"
 	"github.com/abdelhamidbakhta/senkyou/internal/broker"
+	"github.com/abdelhamidbakhta/senkyou/internal/config"
 )
 
-func NewBroker(config Config) (broker.Broker, error) {
-	switch config.BrokerType {
-	case broker.Nats:
-		return broker.NewNatsBroker(config.NatsUrl)
-	case broker.Kafka:
-		return broker.NewKafkaBroker(config.KafkaUrl)
+func NewBroker(cfg config.Config) (broker.Broker, error) {
+	switch cfg.BrokerType {
+	case config.BrokerNats:
+		return broker.NewNatsBroker(cfg.NatsUrl)
+	case config.BrokerKafka:
+		return broker.NewKafkaBroker(cfg.KafkaUrl)
 	default:
 		return nil, errors.New("unsupported broker type")
 	}

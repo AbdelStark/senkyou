@@ -1,11 +1,6 @@
 package broker
 
-const (
-	Nats  = "nats"
-	Kafka = "kafka"
-)
 
-type BrokerType string
 
 type Broker interface {
 	Publish(topic string, message []byte) error

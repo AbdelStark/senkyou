@@ -21,6 +21,7 @@ Usage:
   senkyou [flags]
 
 Flags:
+      --apm-enabled                  enable application performance monitoring using elk stack
       --broker-type string           message broker type (nats, kafka) (default "nats")
   -h, --help                         help for senkyou
       --http-enabled                 start http server for administration
@@ -31,8 +32,7 @@ Flags:
       --rpc-url string               ethereum rpc url (default "http://127.0.0.1:8545")
       --topic-errors string          topic to use for error handling (default "errors")
       --topic-rpc-requests string    topic to use for receiving incoming RPC requests (default "rpc.request")
-      --topic-rpc-responses string   topic to use for pushing RPC responses (default "rpc.response")
-```
+      --topic-rpc-responses string   topic to use for pushing RPC responses (default "rpc.response")```
 
 ## Examples
 
@@ -50,5 +50,14 @@ senkyou \
 --logging=INFO \
 --http-enabled --http-port=9000 \
 --rpc-url=http://127.0.0.1:8545 \
---nats-url=nats://127.0.0.1:4222 --broker-type=nats
+--nats-url=nats://127.0.0.1:4222 --broker-type=nats \
+--apm-enabled
+```
+
+## Application performance monitoring
+
+Configure APM server.
+```
+export ELASTIC_APM_SERVER_URL=https://....apm.europe-west1.gcp.cloud.es.io:443
+export ELASTIC_APM_SECRET_TOKEN=secret
 ```

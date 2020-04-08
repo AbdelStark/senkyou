@@ -2,6 +2,7 @@ package internal
 
 import (
 	"github.com/abdelhamidbakhta/senkyou/internal/broker"
+	"github.com/abdelhamidbakhta/senkyou/internal/config"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/abdelhamidbakhta/senkyou/internal/net"
 	"go.uber.org/zap"
@@ -13,7 +14,7 @@ type Senkyou interface {
 	Start()
 }
 
-func NewSenkyou(config Config, broker broker.Broker) (Senkyou, error) {
+func NewSenkyou(config config.Config, broker broker.Broker) (Senkyou, error) {
 	logger = log.GetLoggerWithLevel(config.LogLevel.ZapLevel)
 	return senkyou{
 		config:    config,
@@ -23,7 +24,7 @@ func NewSenkyou(config Config, broker broker.Broker) (Senkyou, error) {
 }
 
 type senkyou struct {
-	config    Config
+	config    config.Config
 	broker    broker.Broker
 	rpcClient net.RpcClient
 }
