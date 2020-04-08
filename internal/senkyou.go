@@ -15,7 +15,7 @@ type Senkyou interface {
 }
 
 func NewSenkyou(config config.Config, broker broker.Broker) (Senkyou, error) {
-	logger = log.GetLoggerWithLevel(config.LogLevel.ZapLevel)
+	logger = log.GetLogger(config)
 	return senkyou{
 		config:    config,
 		broker:    broker,

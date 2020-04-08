@@ -6,6 +6,7 @@ import (
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/gorilla/mux"
 	"go.elastic.co/apm/module/apmgorilla"
+	"go.elastic.co/apm/module/apmzap"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io/ioutil"
@@ -21,7 +22,7 @@ type SenkyouServer interface {
 }
 
 func NewSenkyouServer(config config.Config, broker broker.Broker, logLevel zapcore.Level) SenkyouServer {
-	logger = log.GetLoggerWithLevel(logLevel)
+	logger = log.GetLogger(config)
 	return server{
 		config: config,
 		broker: broker,
@@ -79,5 +80,7 @@ func (s server) sub(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server) home(w http.ResponseWriter, r *http.Request) {
+	traceContextFields := apmzap.TraceContext(r.Context())
+	logger.With(traceContextFields...).Debug("handling home request")
 	_, _ = w.Write([]byte("senkyou is up!\n"))
 }

@@ -19,9 +19,10 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.6.2 // indirect
 	go.elastic.co/apm/module/apmgorilla v1.7.2
+	go.elastic.co/apm/module/apmzap v1.7.2
 	go.uber.org/zap v1.14.1
 	golang.org/x/crypto v0.0.0-20200403201458-baeed622b8d8 // indirect
-	golang.org/x/sys v0.0.0-20200406155108-e3b113bbe6a4 // indirect
+	golang.org/x/sys v0.0.0-20200408040146-ea54a3c99b9b // indirect
 	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	howett.net/plist v0.0.0-20200225050739-77e249a2e2ba // indirect

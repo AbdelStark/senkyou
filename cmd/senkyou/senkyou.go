@@ -31,7 +31,7 @@ func main() {
 	cmd.PersistentFlags().BoolVar(&senkyouConfig.ApmEnabled, "apm-enabled", senkyouConfig.ApmEnabled, "enable application performance monitoring using elk stack")
 
 	err := cmd.Execute()
-	logger := log.GetLoggerWithLevel(senkyouConfig.LogLevel.ZapLevel)
+	logger := log.GetLogger(senkyouConfig)
 	defer logger.Sync()
 	if err != nil {
 		logger.Error("Failed to execute", zap.Error(err))
