@@ -7,12 +7,18 @@ import (
 )
 
 func NewBroker(cfg config.Config) (broker.Broker, error) {
+	var coreBroker broker.Broker
+	var err error
 	switch cfg.BrokerType {
 	case config.BrokerNats:
-		return broker.NewNatsBroker(cfg.NatsUrl)
+		coreBroker, err = broker.NewNatsBroker(cfg.NatsUrl)
 	case config.BrokerKafka:
-		return broker.NewKafkaBroker(cfg.KafkaUrl)
+		coreBroker, err = broker.NewKafkaBroker(cfg.KafkaUrl)
 	default:
 		return nil, errors.New("unsupported broker type")
 	}
+	if cfg.ApmEnabled {
+		coreBroker = broker.NewApmBroker(coreBroker)
+	}
+	return coreBroker, err
 }

@@ -56,7 +56,7 @@ func (s server) pub(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = s.broker.Publish(topic, body)
+	err = s.broker.Publish(r.Context(), topic, body)
 	if err != nil {
 		logger.Error("failed to publish message", zap.Error(err))
 		http.Error(w, err.Error(), http.StatusBadRequest)

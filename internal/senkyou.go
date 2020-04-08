@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"context"
 	"github.com/abdelhamidbakhta/senkyou/internal/broker"
 	"github.com/abdelhamidbakhta/senkyou/internal/config"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
@@ -19,7 +20,7 @@ func NewSenkyou(config config.Config, broker broker.Broker) (Senkyou, error) {
 	return senkyou{
 		config:    config,
 		broker:    broker,
-		rpcClient: net.NewRpcClient(config.RpcUrl),
+		rpcClient: net.NewRpcClient(config),
 	}, nil
 }
 
@@ -43,12 +44,12 @@ func (s senkyou) onIncomingRequest(request []byte) {
 		s.handleError(err)
 		return
 	}
-	s.handleError(s.broker.Publish(s.config.TopicOutgoingRpcResponses, response))
+	s.handleError(s.broker.Publish(context.Background(), s.config.TopicOutgoingRpcResponses, response))
 }
 
 func (s senkyou) handleError(err error) {
 	if err != nil {
 		logger.Error("error occurred", zap.Error(err))
-		_ = s.broker.Publish(s.config.TopicErrors, []byte(err.Error()))
+		_ = s.broker.Publish(context.Background(), s.config.TopicErrors, []byte(err.Error()))
 	}
 }

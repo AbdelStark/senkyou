@@ -5,7 +5,9 @@ import (
 	"github.com/abdelhamidbakhta/senkyou/internal/config"
 	"github.com/abdelhamidbakhta/senkyou/internal/log"
 	"github.com/abdelhamidbakhta/senkyou/internal/net"
+	"github.com/opentracing/opentracing-go"
 	"github.com/spf13/cobra"
+	"go.elastic.co/apm/module/apmot"
 	"go.uber.org/zap"
 	"os"
 )
@@ -41,6 +43,9 @@ func main() {
 
 func run(cfg *config.Config) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
+		if cfg.ApmEnabled{
+			opentracing.SetGlobalTracer(apmot.New())
+		}
 		broker, err := internal.NewBroker(*cfg)
 		if err != nil {
 			return err

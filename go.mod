@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
 	github.com/nats-io/nats.go v1.9.2
+	github.com/opentracing/opentracing-go v1.1.0
 	github.com/pelletier/go-toml v1.7.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/procfs v0.0.11 // indirect
@@ -18,8 +19,10 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.6.2 // indirect
+	go.elastic.co/apm v1.7.2
 	go.elastic.co/apm/module/apmgorilla v1.7.2
 	go.elastic.co/apm/module/apmhttp v1.7.2
+	go.elastic.co/apm/module/apmot v1.7.2
 	go.elastic.co/apm/module/apmzap v1.7.2
 	go.uber.org/zap v1.14.1
 	golang.org/x/crypto v0.0.0-20200403201458-baeed622b8d8 // indirect
