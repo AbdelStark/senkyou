@@ -19,6 +19,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.6.2 // indirect
 	go.elastic.co/apm/module/apmgorilla v1.7.2
+	go.elastic.co/apm/module/apmhttp v1.7.2
 	go.elastic.co/apm/module/apmzap v1.7.2
 	go.uber.org/zap v1.14.1
 	golang.org/x/crypto v0.0.0-20200403201458-baeed622b8d8 // indirect

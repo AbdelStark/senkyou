@@ -2,6 +2,7 @@ package net
 
 import (
 	"bytes"
+	"go.elastic.co/apm/module/apmhttp"
 	"io/ioutil"
 	"net/http"
 )
@@ -15,13 +16,13 @@ type RpcClient interface {
 func NewRpcClient(url string) RpcClient {
 	return rpcClient{
 		url:    url,
-		client: http.Client{},
+		client: apmhttp.WrapClient(&http.Client{}),
 	}
 }
 
 type rpcClient struct {
 	url    string
-	client http.Client
+	client *http.Client
 }
 
 func (r rpcClient) Call(request []byte) ([]byte, error) {
