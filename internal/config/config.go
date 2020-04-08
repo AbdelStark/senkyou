@@ -1,10 +1,8 @@
-package internal
+package config
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/abdelhamidbakhta/senkyou/internal/broker"
-	"github.com/abdelhamidbakhta/senkyou/internal/log"
 )
 
 type Config struct {
@@ -17,12 +15,13 @@ type Config struct {
 	TopicIncomingRpcRequests  string
 	TopicOutgoingRpcResponses string
 	TopicErrors               string
-	LogLevel                  log.LogLevelFlag
+	LogLevel                  LogLevelFlag
+	ApmEnabled                bool
 }
 
 func NewDefaultConfig() Config {
 	return Config{
-		BrokerType:                broker.Nats,
+		BrokerType:                BrokerNats,
 		NatsUrl:                   "nats://127.0.0.1:4222",
 		KafkaUrl:                  "127.0.0.1:9092",
 		HttpEnabled:               false,
@@ -31,7 +30,8 @@ func NewDefaultConfig() Config {
 		TopicIncomingRpcRequests:  "rpc.request",
 		TopicOutgoingRpcResponses: "rpc.response",
 		TopicErrors:               "errors",
-		LogLevel:                  log.NewLogLevelFlag(),
+		LogLevel:                  NewLogLevelFlag(),
+		ApmEnabled:                false,
 	}
 }
 

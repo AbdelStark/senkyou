@@ -1,6 +1,7 @@
 package broker
 
 import (
+	"context"
 	"github.com/nats-io/nats.go"
 )
 
@@ -18,7 +19,7 @@ func NewNatsBroker(url string) (Broker, error) {
 	}, nil
 }
 
-func (n natsBroker) Publish(topic string, message []byte) error {
+func (n natsBroker) Publish(_ context.Context, topic string, message []byte) error {
 	return n.Conn.Publish(topic, message)
 }
 
